@@ -53,7 +53,7 @@ namespace Game_2.Snake
 
         private void initTimer()
         {
-            timer = new Timer(1000);
+            timer = new Timer(10);
             timer.Elapsed += moveSnake;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -67,7 +67,8 @@ namespace Game_2.Snake
 
         public abstract void changeDirection(Enums.directions pDirection);
 
-        public abstract bool CheckFood();
+        public abstract bool CheckFood(Food pFood);
+        
 
         #endregion
     }

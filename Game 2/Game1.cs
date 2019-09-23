@@ -23,6 +23,9 @@ namespace Game_2
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = 1500;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 1000;   // set this value to the desired height of your window
         }
 
         /// <summary>
@@ -96,7 +99,13 @@ namespace Game_2
                 playerComponent.Update(gameTime);
             }
 
+            if(_foodList.Count > 0 && _player1List[0].CheckFood(_foodList[0]))
+            {
+                _foodList.RemoveAt(0);
+                for (int i = 0; i < 30; i++)
+                    _player1List.Add(new Body(Content.Load<Texture2D>("Snake_Body"), _player1List[(_player1List.Count - 1)].previousPosition));
 
+            }
 
             base.Update(gameTime);
         }
@@ -112,16 +121,19 @@ namespace Game_2
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            foreach(PlayerComponent playerComponent in _player1List)
+            _player1List.Reverse();
+            foreach (PlayerComponent playerComponent in _player1List)
             {
                 playerComponent.Draw(gameTime, spriteBatch);
             }
+            _player1List.Reverse();
 
-            foreach(Food food in _foodList)
+
+
+            foreach (Food food in _foodList)
             {
                 food.Draw(gameTime, spriteBatch);
             }
-
       
 
             spriteBatch.End();

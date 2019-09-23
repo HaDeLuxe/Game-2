@@ -51,6 +51,7 @@ namespace Game_2.Snake
                     break;
             }
             spriteBatch.Draw(_texture2D, new Vector2(Rectangle.X, Rectangle.Y), null, Color.White, rotation, new Vector2(_texture2D.Width / 2f, _texture2D.Height / 2f), 1f, SpriteEffects.None, 0);
+
         }
 
         public override void Update(GameTime gameTime)
@@ -63,8 +64,8 @@ namespace Game_2.Snake
             if((pDirection == Enums.directions.Right && Direction != Enums.directions.Left) ||
                 (pDirection == Enums.directions.Left && Direction != Enums.directions.Right) ||
                 (pDirection == Enums.directions.Up && Direction != Enums.directions.Down) ||
-                (pDirection == Enums.directions.Down && Direction != Enums.directions.Up))
-            Direction = pDirection;
+                (pDirection == Enums.directions.Down && Direction != Enums.directions.Up))  
+                    Direction = pDirection;
         }
 
         public override void moveSnake(object source, ElapsedEventArgs e)
@@ -73,19 +74,30 @@ namespace Game_2.Snake
             switch (Direction)
             {
                 case Enums.directions.Left:
-                    CurrentPosition = new Vector2(CurrentPosition.X - 64, CurrentPosition.Y);
+                    CurrentPosition = new Vector2(CurrentPosition.X - 2, CurrentPosition.Y);
                     break;
                 case Enums.directions.Right:
-                    CurrentPosition = new Vector2(CurrentPosition.X + 64, CurrentPosition.Y);
+                    CurrentPosition = new Vector2(CurrentPosition.X + 2, CurrentPosition.Y);
                     break;
                 case Enums.directions.Up:
-                    CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y - 64);
+                    CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y - 2);
                     break;
                 case Enums.directions.Down:
-                    CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y + 64);
+                    CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y + 2);
                     break;
             }
         }
+
+        public override bool CheckFood(Food pFood)
+        {
+            if (Rectangle.Intersects(pFood.Rectangle))
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
 
 
 
