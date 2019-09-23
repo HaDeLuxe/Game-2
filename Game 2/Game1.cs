@@ -12,15 +12,17 @@ namespace Game_2
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
+        
         SpriteBatch spriteBatch;
 
         private List<PlayerComponent> _player1List;
+        private List<PlayerComponent> _player2List;
 
         private List<Food> _foodList;
 
         public Game1()
         {
+            GraphicsDeviceManager graphics;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
@@ -39,6 +41,7 @@ namespace Game_2
             // TODO: Add your initialization logic here
 
             _player1List = new List<PlayerComponent>();
+            _player2List = new List<PlayerComponent>();
             _foodList = new List<Food>();
 
             base.Initialize();
@@ -54,6 +57,8 @@ namespace Game_2
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _player1List.Add(new Head(Content.Load<Texture2D>("Snake_Head"), new Vector2(50,50),Enums.directions.Right));
+            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(50, 50), Enums.directions.Left));
+
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
 
 
@@ -81,33 +86,48 @@ namespace Game_2
 
             // TODO: Add your update logic here
 
+            #region player1
+
             if (Keyboard.GetState().IsKeyDown(Keys.W)) _player1List[0].changeDirection(Enums.directions.Up);
             if (Keyboard.GetState().IsKeyDown(Keys.D)) _player1List[0].changeDirection(Enums.directions.Right);
             if (Keyboard.GetState().IsKeyDown(Keys.S)) _player1List[0].changeDirection(Enums.directions.Down);
             if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].changeDirection(Enums.directions.Left);
 
-            if(Keyboard.GetState().IsKeyDown(Keys.F)) _player1List.Add(new Body(Content.Load<Texture2D>("Snake_Body"), new Vector2(_player1List.Last().previousPosition.X, _player1List.Last().previousPosition.Y)));
+            updatePlayer(_player1List, gameTime, 1);
+            updatePlayer(_player2List, gameTime, 2);
 
-            for (int i = 1; i <= _player1List.Count-1; i++)
+            #endregion
+
+
+
+            base.Update(gameTime);
+        }
+
+        private void updatePlayer(List<PlayerComponent> pPlayerList, GameTime gameTime, short pPlayer)
+        {
+            for (int i = 1; i <= pPlayerList.Count - 1; i++)
             {
-                if (_player1List[i - 1].previousPosition != null || _player1List[i - 1].previousPosition == _player1List[i - 1].CurrentPosition)
-                    _player1List[i].NewPosition = _player1List[i - 1].previousPosition;
+                if (pPlayerList[i - 1].previousPosition != null || pPlayerList[i - 1].previousPosition == pPlayerList[i - 1].CurrentPosition)
+                    pPlayerList[i].NewPosition = pPlayerList[i - 1].previousPosition;
             }
 
-            foreach (PlayerComponent playerComponent in _player1List)
+            foreach (PlayerComponent playerComponent in pPlayerList)
             {
                 playerComponent.Update(gameTime);
             }
 
-            if(_foodList.Count > 0 && _player1List[0].CheckFood(_foodList[0]))
+            if (_foodList.Count > 0 && pPlayerList[0].CheckFood(_foodList[0]))
             {
                 _foodList.RemoveAt(0);
                 for (int i = 0; i < 30; i++)
-                    _player1List.Add(new Body(Content.Load<Texture2D>("Snake_Body"), _player1List[(_player1List.Count - 1)].previousPosition));
-
+                {
+                    if(pPlayer == 1)
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].previousPosition));
+                    else if(pPlayer == 2)
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].previousPosition));
+                }
             }
-
-            base.Update(gameTime);
+                    
         }
 
         /// <summary>
@@ -127,6 +147,13 @@ namespace Game_2
                 playerComponent.Draw(gameTime, spriteBatch);
             }
             _player1List.Reverse();
+
+            _player2List.Reverse();
+            foreach(PlayerComponent playerComponent in _player2List)
+            {
+                playerComponent.Draw(gameTime, spriteBatch);
+            }
+            _player2List.Reverse();
 
 
 
