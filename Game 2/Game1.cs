@@ -57,7 +57,7 @@ namespace Game_2
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _player1List.Add(new Head(Content.Load<Texture2D>("Snake_Head"), new Vector2(50,50),Enums.directions.Right));
-            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(50, 50), Enums.directions.Left));
+            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(1000, 150), Enums.directions.Left));
 
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
 
@@ -94,10 +94,19 @@ namespace Game_2
             if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].changeDirection(Enums.directions.Left);
 
             updatePlayer(_player1List, gameTime, 1);
-            updatePlayer(_player2List, gameTime, 2);
 
             #endregion
 
+            #region player2
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up)) _player2List[0].changeDirection(Enums.directions.Up);
+            if (Keyboard.GetState().IsKeyDown(Keys.Right)) _player2List[0].changeDirection(Enums.directions.Right);
+            if (Keyboard.GetState().IsKeyDown(Keys.Down)) _player2List[0].changeDirection(Enums.directions.Down);
+            if (Keyboard.GetState().IsKeyDown(Keys.Left)) _player2List[0].changeDirection(Enums.directions.Left);
+
+            updatePlayer(_player2List, gameTime, 2);
+
+            #endregion
 
 
             base.Update(gameTime);
@@ -107,8 +116,8 @@ namespace Game_2
         {
             for (int i = 1; i <= pPlayerList.Count - 1; i++)
             {
-                if (pPlayerList[i - 1].previousPosition != null || pPlayerList[i - 1].previousPosition == pPlayerList[i - 1].CurrentPosition)
-                    pPlayerList[i].NewPosition = pPlayerList[i - 1].previousPosition;
+                if (pPlayerList[i - 1].PreviousPosition != null || pPlayerList[i - 1].PreviousPosition == pPlayerList[i - 1].CurrentPosition)
+                    pPlayerList[i].NewPosition = pPlayerList[i - 1].PreviousPosition;
             }
 
             foreach (PlayerComponent playerComponent in pPlayerList)
@@ -119,12 +128,12 @@ namespace Game_2
             if (_foodList.Count > 0 && pPlayerList[0].CheckFood(_foodList[0]))
             {
                 _foodList.RemoveAt(0);
-                for (int i = 0; i < 30; i++)
+                for (int i = 0; i < 50; i++)
                 {
                     if(pPlayer == 1)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].previousPosition));
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition));
                     else if(pPlayer == 2)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].previousPosition));
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition));
                 }
             }
                     

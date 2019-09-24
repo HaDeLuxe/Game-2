@@ -13,8 +13,6 @@ namespace Game_2.Snake
     {
         #region fields
 
-        Timer timer;
-
         #endregion
 
         #region properties
@@ -70,7 +68,7 @@ namespace Game_2.Snake
 
         public override void moveSnake(object source, ElapsedEventArgs e)
         {
-            previousPosition = CurrentPosition;
+            PreviousPosition = CurrentPosition;
             switch (Direction)
             {
                 case Enums.directions.Left:

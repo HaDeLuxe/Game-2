@@ -47,7 +47,7 @@ namespace Game_2.Snake
 
         public override void moveSnake(object source, ElapsedEventArgs e)
         {
-            previousPosition = CurrentPosition;
+            PreviousPosition = CurrentPosition;
             CurrentPosition = NewPosition;
         }
 

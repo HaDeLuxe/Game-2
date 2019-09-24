@@ -15,7 +15,8 @@ namespace Game_2.Snake
 
         protected Texture2D _texture2D;
 
-        Timer timer;
+        Timer _timer;
+        //Timer timer2;
 
         #endregion
 
@@ -26,7 +27,9 @@ namespace Game_2.Snake
 
         public Vector2 NewPosition { get; set; }
 
-        public Vector2 previousPosition { get; set; }
+        public Vector2 PreviousPosition { get; set; }
+
+        public float Rotation { get; set; }
 
 
         public Rectangle Rectangle {
@@ -43,7 +46,7 @@ namespace Game_2.Snake
         {
             _texture2D = pTexture;
             initTimer();
-            //CurrentPosition = pPosition;
+            CurrentPosition = pPosition;
         }
 
         public void updatePositions()
@@ -53,11 +56,24 @@ namespace Game_2.Snake
 
         private void initTimer()
         {
-            timer = new Timer(10);
-            timer.Elapsed += moveSnake;
-            timer.AutoReset = true;
-            timer.Enabled = true;
+            _timer = new Timer(10);
+            _timer.Elapsed += moveSnake;
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
         }
+
+        //private void initTimer2()
+        //{
+        //    timer2 = new Timer(100);
+        //    timer2.Elapsed += setPreviousPosition;
+        //    timer.AutoReset = true;
+        //    timer.Enabled = true;
+        //}
+
+        //public void setPreviousPosition(Object source, ElapsedEventArgs e)
+        //{
+        //    previousPosition = CurrentPosition;
+        //}
 
         public abstract void moveSnake(Object source, ElapsedEventArgs e);
 
