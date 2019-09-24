@@ -18,6 +18,7 @@ namespace Game_2.Snake
         Timer _timer;
         //Timer timer2;
 
+
         #endregion
 
 
@@ -31,6 +32,10 @@ namespace Game_2.Snake
 
         public float Rotation { get; set; }
 
+        public float PreviousRotation { get; set; }
+
+        public Vector2 directionVector { get; set; }
+
 
         public Rectangle Rectangle {
             get {
@@ -42,11 +47,23 @@ namespace Game_2.Snake
 
         #region methods
 
-        protected PlayerComponent(Texture2D pTexture, Vector2 pPosition)
+        protected PlayerComponent(Texture2D pTexture, Vector2 pPosition, float pRotation)
         {
             _texture2D = pTexture;
             initTimer();
             CurrentPosition = pPosition;
+            Rotation = pRotation;
+            PreviousRotation = pRotation;
+        }
+
+        public void RotateBy(float a)
+        {
+            Vector2 v = new Vector2(1,1);
+            var ca = Math.Cos(a);
+            var sa = Math.Sin(a);
+            var rx = v.X * ca - v.Y * sa;
+
+            directionVector = new Vector2((float)rx, (float)(v.X * sa + v.Y * ca));
         }
 
         public void updatePositions()

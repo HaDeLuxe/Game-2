@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -56,8 +57,8 @@ namespace Game_2
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _player1List.Add(new Head(Content.Load<Texture2D>("Snake_Head"), new Vector2(50,50),Enums.directions.Right));
-            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(1000, 150), Enums.directions.Left));
+            _player1List.Add(new Head(Content.Load<Texture2D>("Snake_Head"), new Vector2(50, 50), Enums.directions.Right, (float)Math.PI/2));
+            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(1000, 150), Enums.directions.Left, (float)Math.PI/2));
 
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
 
@@ -89,9 +90,11 @@ namespace Game_2
             #region player1
 
             if (Keyboard.GetState().IsKeyDown(Keys.W)) _player1List[0].changeDirection(Enums.directions.Up);
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) _player1List[0].changeDirection(Enums.directions.Right);
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) _player1List[0].Rotation += (float)Math.PI / 12;
+                                                       //_player1List[0].changeDirection(Enums.directions.Right);
             if (Keyboard.GetState().IsKeyDown(Keys.S)) _player1List[0].changeDirection(Enums.directions.Down);
-            if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].changeDirection(Enums.directions.Left);
+            if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].Rotation -= (float)Math.PI / 12;
+            //_player1List[0].changeDirection(Enums.directions.Left);
 
             updatePlayer(_player1List, gameTime, 1);
 
@@ -131,9 +134,9 @@ namespace Game_2
                 for (int i = 0; i < 50; i++)
                 {
                     if(pPlayer == 1)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition));
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition,(float)Math.PI));
                     else if(pPlayer == 2)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition));
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition, (float)Math.PI));
                 }
             }
                     

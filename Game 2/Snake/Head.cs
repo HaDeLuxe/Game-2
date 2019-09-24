@@ -23,32 +23,31 @@ namespace Game_2.Snake
 
         #region methods
 
-        public Head(Texture2D pTexture, Vector2 pPosition, Enums.directions pDirection) : base(pTexture, pPosition)
+        public Head(Texture2D pTexture, Vector2 pPosition, Enums.directions pDirection, float pRotation) : base(pTexture, pPosition, pRotation)
         {
             Direction = pDirection;
         }
 
 
-        float rotation = 0;
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            switch (Direction)
-            {
-                case Enums.directions.Left:
-                    rotation = (float) -Math.PI/2;
-                    break;
-                case Enums.directions.Up:
-                    rotation = 0;
-                    break;
-                case Enums.directions.Down:
-                    rotation = (float)Math.PI;
-                    break;
-                case Enums.directions.Right:
-                    rotation = (float)Math.PI/2;
-                    break;
-            }
-            spriteBatch.Draw(_texture2D, new Vector2(Rectangle.X, Rectangle.Y), null, Color.White, rotation, new Vector2(_texture2D.Width / 2f, _texture2D.Height / 2f), 1f, SpriteEffects.None, 0);
+            //switch (Direction)
+            //{
+            //    case Enums.directions.Left:
+            //        Rotation = (float) -Math.PI/2;
+            //        break;
+            //    case Enums.directions.Up:
+            //        Rotation = 0;
+            //        break;
+            //    case Enums.directions.Down:
+            //        Rotation = (float)Math.PI;
+            //        break;
+            //    case Enums.directions.Right:
+            //        Rotation = (float)Math.PI/2;
+            //        break;
+            //}
+            spriteBatch.Draw(_texture2D, new Vector2(Rectangle.X, Rectangle.Y), null, Color.White, Rotation, new Vector2(_texture2D.Width / 2f, _texture2D.Height / 2f), 1f, SpriteEffects.None, 0);
 
         }
 
@@ -69,21 +68,25 @@ namespace Game_2.Snake
         public override void moveSnake(object source, ElapsedEventArgs e)
         {
             PreviousPosition = CurrentPosition;
-            switch (Direction)
-            {
-                case Enums.directions.Left:
-                    CurrentPosition = new Vector2(CurrentPosition.X - 2, CurrentPosition.Y);
-                    break;
-                case Enums.directions.Right:
-                    CurrentPosition = new Vector2(CurrentPosition.X + 2, CurrentPosition.Y);
-                    break;
-                case Enums.directions.Up:
-                    CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y - 2);
-                    break;
-                case Enums.directions.Down:
-                    CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y + 2);
-                    break;
-            }
+            PreviousRotation = Rotation;
+            RotateBy(Rotation);
+            CurrentPosition += directionVector;
+
+            //switch (Direction)
+            //{
+            //    case Enums.directions.Left:
+            //        CurrentPosition = new Vector2(CurrentPosition.X - 2, CurrentPosition.Y);
+            //        break;
+            //    case Enums.directions.Right:
+            //        CurrentPosition = new Vector2(CurrentPosition.X + 2, CurrentPosition.Y);
+            //        break;
+            //    case Enums.directions.Up:
+            //        CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y - 2);
+            //        break;
+            //    case Enums.directions.Down:
+            //        CurrentPosition = new Vector2(CurrentPosition.X, CurrentPosition.Y + 2);
+            //        break;
+            //}
         }
 
         public override bool CheckFood(Food pFood)

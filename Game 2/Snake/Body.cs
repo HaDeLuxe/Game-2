@@ -24,7 +24,7 @@ namespace Game_2.Snake
 
         #region methods
 
-        public Body(Texture2D pTexture, Vector2 pPosition) : base(pTexture, pPosition)
+        public Body(Texture2D pTexture, Vector2 pPosition, float pRotation) : base(pTexture, pPosition, pRotation)
         {
         }
 
@@ -42,13 +42,16 @@ namespace Game_2.Snake
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             
-            spriteBatch.Draw(_texture2D, new Vector2(Rectangle.X, Rectangle.Y), null, Color.White, 0, new Vector2(_texture2D.Width / 2f, _texture2D.Height / 2f), 1f, SpriteEffects.None, 0);
+            spriteBatch.Draw(_texture2D, new Vector2(Rectangle.X, Rectangle.Y), null, Color.White, Rotation, new Vector2(_texture2D.Width / 2f, _texture2D.Height / 2f), 1f, SpriteEffects.None, 0);
         }
 
         public override void moveSnake(object source, ElapsedEventArgs e)
         {
             PreviousPosition = CurrentPosition;
             CurrentPosition = NewPosition;
+
+            PreviousRotation = Rotation;
+            RotateBy(Rotation);
         }
 
         public override void Update(GameTime gameTime)
