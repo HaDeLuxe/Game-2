@@ -57,7 +57,7 @@ namespace Game_2
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _player1List.Add(new Head(Content.Load<Texture2D>("Snake_Head"), new Vector2(50, 50), Enums.directions.Right, (float)Math.PI/2));
+            _player1List.Add(new Head(Content.Load<Texture2D>("Head"), new Vector2(50, 50), Enums.directions.Right, (float)Math.PI/2));
             _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(1000, 150), Enums.directions.Left, (float)Math.PI/2));
 
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
@@ -134,7 +134,7 @@ namespace Game_2
                 for (int i = 0; i < 50; i++)
                 {
                     if(pPlayer == 1)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition,(float)Math.PI));
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Body"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition,(float)Math.PI));
                     else if(pPlayer == 2)
                         pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition, (float)Math.PI));
                 }
