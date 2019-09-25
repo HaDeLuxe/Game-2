@@ -39,8 +39,6 @@ namespace Game_2
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             _player1List = new List<PlayerComponent>();
             _player2List = new List<PlayerComponent>();
             _foodList = new List<Food>();
@@ -57,13 +55,18 @@ namespace Game_2
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _player1List.Add(new Head(Content.Load<Texture2D>("Head"), new Vector2(50, 50), Enums.directions.Right, (float)Math.PI/2));
-            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(1000, 150), Enums.directions.Left, (float)Math.PI/2));
+            _player1List.Add(new Head(Content.Load<Texture2D>("Snake_Head"), new Vector2(50, 50), 0));
+            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(1000, 150), 0));
 
+            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
+            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
+            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
+            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
 
 
-            // TODO: use this.Content to load your game content here
+
+
         }
 
         /// <summary>
@@ -85,29 +88,21 @@ namespace Game_2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-
             #region player1
+            
+            if (Keyboard.GetState().IsKeyDown(Keys.D)) _player1List[0].Rotation += (float)Math.PI / 48;
+            if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].Rotation -= (float)Math.PI / 48;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.W)) _player1List[0].changeDirection(Enums.directions.Up);
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) _player1List[0].Rotation += (float)Math.PI / 12;
-                                                       //_player1List[0].changeDirection(Enums.directions.Right);
-            if (Keyboard.GetState().IsKeyDown(Keys.S)) _player1List[0].changeDirection(Enums.directions.Down);
-            if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].Rotation -= (float)Math.PI / 12;
-            //_player1List[0].changeDirection(Enums.directions.Left);
-
-            updatePlayer(_player1List, gameTime, 1);
+            _updatePlayer(_player1List, gameTime, 1);
 
             #endregion
 
             #region player2
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)) _player2List[0].changeDirection(Enums.directions.Up);
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) _player2List[0].changeDirection(Enums.directions.Right);
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) _player2List[0].changeDirection(Enums.directions.Down);
-            if (Keyboard.GetState().IsKeyDown(Keys.Left)) _player2List[0].changeDirection(Enums.directions.Left);
+            if (Keyboard.GetState().IsKeyDown(Keys.Right)) _player2List[0].Rotation += (float)Math.PI / 48;
+                if (Keyboard.GetState().IsKeyDown(Keys.Left)) _player2List[0].Rotation -= (float)Math.PI / 48;
 
-            updatePlayer(_player2List, gameTime, 2);
+            _updatePlayer(_player2List, gameTime, 2);
 
             #endregion
 
@@ -115,12 +110,15 @@ namespace Game_2
             base.Update(gameTime);
         }
 
-        private void updatePlayer(List<PlayerComponent> pPlayerList, GameTime gameTime, short pPlayer)
+        private void _updatePlayer(List<PlayerComponent> pPlayerList, GameTime gameTime, short pPlayer)
         {
             for (int i = 1; i <= pPlayerList.Count - 1; i++)
             {
                 if (pPlayerList[i - 1].PreviousPosition != null || pPlayerList[i - 1].PreviousPosition == pPlayerList[i - 1].CurrentPosition)
+                {
                     pPlayerList[i].NewPosition = pPlayerList[i - 1].PreviousPosition;
+                    pPlayerList[i].Rotation = pPlayerList[i - 1].PreviousRotation;
+                }
             }
 
             foreach (PlayerComponent playerComponent in pPlayerList)
@@ -128,18 +126,22 @@ namespace Game_2
                 playerComponent.Update(gameTime);
             }
 
-            if (_foodList.Count > 0 && pPlayerList[0].CheckFood(_foodList[0]))
+            if (_foodList.Count > 0 && pPlayerList[0].CheckCollision(_foodList[0].Rectangle))
             {
                 _foodList.RemoveAt(0);
                 for (int i = 0; i < 50; i++)
                 {
                     if(pPlayer == 1)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Body"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition,(float)Math.PI));
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition,(float)Math.PI));
                     else if(pPlayer == 2)
                         pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition, (float)Math.PI));
                 }
             }
-                    
+            
+            for(int i = 10; i < pPlayerList.Count; i++)
+            {
+                
+            }
         }
 
         /// <summary>
@@ -149,8 +151,7 @@ namespace Game_2
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
+            
             spriteBatch.Begin();
 
             _player1List.Reverse();

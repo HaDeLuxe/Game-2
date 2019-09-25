@@ -15,12 +15,10 @@ namespace Game_2.Snake
 
         protected Texture2D _texture2D;
 
-        Timer _timer;
-        //Timer timer2;
+        private Timer _timer;
 
 
         #endregion
-
 
         #region properties
 
@@ -34,7 +32,8 @@ namespace Game_2.Snake
 
         public float PreviousRotation { get; set; }
 
-        public Vector2 directionVector { get; set; }
+        public Vector2 DirectionVector { get; set; }
+
 
 
         public Rectangle Rectangle {
@@ -50,7 +49,7 @@ namespace Game_2.Snake
         protected PlayerComponent(Texture2D pTexture, Vector2 pPosition, float pRotation)
         {
             _texture2D = pTexture;
-            initTimer();
+            _initTimer();
             CurrentPosition = pPosition;
             Rotation = pRotation;
             PreviousRotation = pRotation;
@@ -58,49 +57,35 @@ namespace Game_2.Snake
 
         public void RotateBy(float a)
         {
-            Vector2 v = new Vector2(1,1);
-            var ca = Math.Cos(a);
-            var sa = Math.Sin(a);
-            var rx = v.X * ca - v.Y * sa;
-
-            directionVector = new Vector2((float)rx, (float)(v.X * sa + v.Y * ca));
+            DirectionVector = new Vector2((float)Math.Cos(a), (float)Math.Sin(a));
         }
 
-        public void updatePositions()
+        public void UpdatePositions()
         {
             CurrentPosition = NewPosition;
         }
 
-        private void initTimer()
+        private void _initTimer()
         {
             _timer = new Timer(10);
-            _timer.Elapsed += moveSnake;
+            _timer.Elapsed += MoveSnake;
             _timer.AutoReset = true;
             _timer.Enabled = true;
         }
 
-        //private void initTimer2()
-        //{
-        //    timer2 = new Timer(100);
-        //    timer2.Elapsed += setPreviousPosition;
-        //    timer.AutoReset = true;
-        //    timer.Enabled = true;
-        //}
-
-        //public void setPreviousPosition(Object source, ElapsedEventArgs e)
-        //{
-        //    previousPosition = CurrentPosition;
-        //}
-
-        public abstract void moveSnake(Object source, ElapsedEventArgs e);
+        
+       
+        public abstract void MoveSnake(Object source, ElapsedEventArgs e);
 
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
         public abstract void Update(GameTime gameTime);
 
-        public abstract void changeDirection(Enums.directions pDirection);
-
-        public abstract bool CheckFood(Food pFood);
+        public virtual bool CheckCollision(Rectangle pRectangle)
+        {
+            return false;
+        }
+        
         
 
         #endregion
