@@ -50,7 +50,7 @@ namespace Game_2
 
             _mainMenu = new MainMenu(game1, this);
 
-            _lobby = new Lobby();
+            _lobby = new Lobby(this);
 
             _gameManager = new GameManager();
         }
@@ -61,6 +61,8 @@ namespace Game_2
             _lobby.LoadSprites(Content);
             _gameManager.LoadContent(Content);
             _mainMenu.createButtons();
+            _lobby.createButtons();
+            
 
         }
 
@@ -72,7 +74,7 @@ namespace Game_2
                     _mainMenu.Update(gameTime);
                     break;
                 case windows.LOBBY:
-
+                    _lobby.Update(gameTime);
                     break;
                 case windows.PLAYFIELD:
 

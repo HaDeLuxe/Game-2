@@ -1,4 +1,5 @@
-﻿using Game_2.Snake;
+﻿using Game_2.Network;
+using Game_2.Snake;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,6 +19,9 @@ namespace Game_2
 
         private WindowManager _windowManager;
 
+        private Server server;
+
+        private Client client;
 
         public Game1()
         {
@@ -29,6 +33,14 @@ namespace Game_2
 
             graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 900;   // set this value to the desired height of your window
+
+            server = new Server();
+
+            server.StartServer();
+
+            client = new Client();
+
+            client.startClient();
         }
 
         /// <summary>

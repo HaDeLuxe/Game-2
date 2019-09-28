@@ -52,7 +52,6 @@ namespace Game_2.MainMenuNP
             {
                 button.draw(gameTime, spriteBatch);
             }
-                
         }
 
 
@@ -80,7 +79,6 @@ namespace Game_2.MainMenuNP
         private void _exit(object sender, System.EventArgs e)
         {
             _game1.ExitProgram();
-
         }
 
         #endregion
