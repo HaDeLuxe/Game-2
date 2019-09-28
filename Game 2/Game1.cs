@@ -35,12 +35,11 @@ namespace Game_2
             graphics.PreferredBackBufferHeight = 900;   // set this value to the desired height of your window
 
             server = new Server();
-
-            server.StartServer();
+            
 
             client = new Client();
-
             client.startClient();
+            
         }
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace Game_2
         protected override void Initialize()
         {
 
-            _windowManager = new WindowManager(this);
+            _windowManager = new WindowManager(this, server, client);
 
             base.Initialize();
         }

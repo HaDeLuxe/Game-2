@@ -1,4 +1,5 @@
 ﻿using Game_2.MainMenuNP;
+using Game_2.Network;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -44,13 +45,13 @@ namespace Game_2
 
         #region methods
 
-        public WindowManager(Game1 game1)
+        public WindowManager(Game1 game1, Server pServer, Client pClient)
         {
             _currentWindow = windows.MAINMENU;
 
             _mainMenu = new MainMenu(game1, this);
 
-            _lobby = new Lobby(this);
+            _lobby = new Lobby(this, pServer, pClient);
 
             _gameManager = new GameManager();
         }
