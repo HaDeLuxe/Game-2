@@ -38,8 +38,7 @@ namespace Game_2.Snake
         
         public override void MoveSnake(object source, ElapsedEventArgs e)
         {
-            PreviousPosition = CurrentPosition;
-            PreviousRotation = Rotation;
+            
             RotateBy(Rotation);
             DirectionVector.Normalize();
             CurrentPosition -= DirectionVector;
@@ -53,6 +52,12 @@ namespace Game_2.Snake
             }
             else
                 return false;
+        }
+
+        public override void PreviousPosLogic(object source, ElapsedEventArgs e)
+        {
+            PreviousPosition = CurrentPosition;
+            PreviousRotation = Rotation;
         }
 
 

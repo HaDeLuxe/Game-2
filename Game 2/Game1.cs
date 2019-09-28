@@ -1,4 +1,5 @@
-﻿using Game_2.Snake;
+﻿using Game_2.Network;
+using Game_2.Snake;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,10 +17,11 @@ namespace Game_2
         
         SpriteBatch spriteBatch;
 
-        private List<PlayerComponent> _player1List;
-        private List<PlayerComponent> _player2List;
+        private WindowManager _windowManager;
 
-        private List<Food> _foodList;
+        private Server server;
+
+        private Client client;
 
         public Game1()
         {
@@ -27,8 +29,17 @@ namespace Game_2
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            graphics.PreferredBackBufferWidth = 1500;  // set this value to the desired width of your window
-            graphics.PreferredBackBufferHeight = 1000;   // set this value to the desired height of your window
+            IsMouseVisible = true;
+
+            graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 900;   // set this value to the desired height of your window
+
+            server = new Server();
+            
+
+            client = new Client();
+            client.startClient();
+            
         }
 
         /// <summary>
@@ -39,9 +50,8 @@ namespace Game_2
         /// </summary>
         protected override void Initialize()
         {
-            _player1List = new List<PlayerComponent>();
-            _player2List = new List<PlayerComponent>();
-            _foodList = new List<Food>();
+
+            _windowManager = new WindowManager(this, server, client);
 
             base.Initialize();
         }
@@ -55,17 +65,7 @@ namespace Game_2
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _player1List.Add(new Head(Content.Load<Texture2D>("Snake_Head"), new Vector2(50, 50), 0));
-            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(1000, 150), 0));
-
-            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
-            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
-            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
-            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
-            _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
-
-
-
+            _windowManager.LoadContent(Content);
 
         }
 
@@ -86,62 +86,19 @@ namespace Game_2
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+                ExitProgram();
 
-            #region player1
-            
-            if (Keyboard.GetState().IsKeyDown(Keys.D)) _player1List[0].Rotation += (float)Math.PI / 48;
-            if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].Rotation -= (float)Math.PI / 48;
-
-            _updatePlayer(_player1List, gameTime, 1);
-
-            #endregion
-
-            #region player2
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) _player2List[0].Rotation += (float)Math.PI / 48;
-                if (Keyboard.GetState().IsKeyDown(Keys.Left)) _player2List[0].Rotation -= (float)Math.PI / 48;
-
-            _updatePlayer(_player2List, gameTime, 2);
-
-            #endregion
-
+            _windowManager.Update(gameTime);
 
             base.Update(gameTime);
         }
 
-        private void _updatePlayer(List<PlayerComponent> pPlayerList, GameTime gameTime, short pPlayer)
+        /// <summary>
+        /// Exits the programm
+        /// </summary>
+       public void ExitProgram()
         {
-            for (int i = 1; i <= pPlayerList.Count - 1; i++)
-            {
-                if (pPlayerList[i - 1].PreviousPosition != null || pPlayerList[i - 1].PreviousPosition == pPlayerList[i - 1].CurrentPosition)
-                {
-                    pPlayerList[i].NewPosition = pPlayerList[i - 1].PreviousPosition;
-                    pPlayerList[i].Rotation = pPlayerList[i - 1].PreviousRotation;
-                }
-            }
-
-            foreach (PlayerComponent playerComponent in pPlayerList)
-            {
-                playerComponent.Update(gameTime);
-            }
-
-            if (_foodList.Count > 0 && pPlayerList[0].CheckCollision(_foodList[0].Rectangle))
-            {
-                _foodList.RemoveAt(0);
-                for (int i = 0; i < 50; i++)
-                {
-                    if(pPlayer == 1)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition,(float)Math.PI));
-                    else if(pPlayer == 2)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition, (float)Math.PI));
-                }
-            }
-            
-            for(int i = 10; i < pPlayerList.Count; i++)
-            {
-                
-            }
+            this.Exit();
         }
 
         /// <summary>
@@ -154,28 +111,8 @@ namespace Game_2
             
             spriteBatch.Begin();
 
-            _player1List.Reverse();
-            foreach (PlayerComponent playerComponent in _player1List)
-            {
-                playerComponent.Draw(gameTime, spriteBatch);
-            }
-            _player1List.Reverse();
-
-            _player2List.Reverse();
-            foreach(PlayerComponent playerComponent in _player2List)
-            {
-                playerComponent.Draw(gameTime, spriteBatch);
-            }
-            _player2List.Reverse();
-
-
-
-            foreach (Food food in _foodList)
-            {
-                food.Draw(gameTime, spriteBatch);
-            }
-      
-
+            _windowManager.Draw(gameTime, spriteBatch);
+            
             spriteBatch.End();
 
             base.Draw(gameTime);
