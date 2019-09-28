@@ -55,8 +55,8 @@ namespace Game_2
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _player1List.Add(new Head(Content.Load<Texture2D>("Snake_Head"), new Vector2(50, 50), 0));
-            _player2List.Add(new Head(Content.Load<Texture2D>("Snake_Head_Pl_2"), new Vector2(1000, 150), 0));
+            _player1List.Add(new Head(Content.Load<Texture2D>("snakeRobot_head_purple"), new Vector2(50, 50), 0));
+            _player2List.Add(new Head(Content.Load<Texture2D>("snakeRobot_head_red"), new Vector2(1000, 150), 0));
 
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
@@ -64,7 +64,7 @@ namespace Game_2
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
             _foodList.Add(new Food(Content.Load<Texture2D>("Food"), new Vector2(200, 200)));
 
-
+            
 
 
         }
@@ -92,6 +92,8 @@ namespace Game_2
             
             if (Keyboard.GetState().IsKeyDown(Keys.D)) _player1List[0].Rotation += (float)Math.PI / 48;
             if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].Rotation -= (float)Math.PI / 48;
+
+            if(Keyboard.GetState().IsKeyDown(Keys.F)) _player1List.Add(new Body(Content.Load<Texture2D>("snakeRobot_link_purple"), _player1List[(_player1List.Count - 1)].PreviousPosition, (float)Math.PI));
 
             _updatePlayer(_player1List, gameTime, 1);
 
@@ -129,19 +131,16 @@ namespace Game_2
             if (_foodList.Count > 0 && pPlayerList[0].CheckCollision(_foodList[0].Rectangle))
             {
                 _foodList.RemoveAt(0);
-                for (int i = 0; i < 50; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     if(pPlayer == 1)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition,(float)Math.PI));
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("snakeRobot_link_purple"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition,(float)Math.PI));
                     else if(pPlayer == 2)
-                        pPlayerList.Add(new Body(Content.Load<Texture2D>("Snake_Body_Pl_2_NB"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition, (float)Math.PI));
+                        pPlayerList.Add(new Body(Content.Load<Texture2D>("snakeRobot_link_red"), pPlayerList[(pPlayerList.Count - 1)].PreviousPosition, (float)Math.PI));
                 }
             }
             
-            for(int i = 10; i < pPlayerList.Count; i++)
-            {
-                
-            }
+            
         }
 
         /// <summary>

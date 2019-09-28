@@ -16,6 +16,7 @@ namespace Game_2.Snake
         protected Texture2D _texture2D;
 
         private Timer _timer;
+        private Timer _timer2;
 
 
         #endregion
@@ -50,7 +51,9 @@ namespace Game_2.Snake
         {
             _texture2D = pTexture;
             _initTimer();
+            _initTimer2();
             CurrentPosition = pPosition;
+            PreviousPosition = pPosition;
             Rotation = pRotation;
             PreviousRotation = pRotation;
         }
@@ -59,12 +62,7 @@ namespace Game_2.Snake
         {
             DirectionVector = new Vector2((float)Math.Cos(a), (float)Math.Sin(a));
         }
-
-        public void UpdatePositions()
-        {
-            CurrentPosition = NewPosition;
-        }
-
+       
         private void _initTimer()
         {
             _timer = new Timer(10);
@@ -73,7 +71,15 @@ namespace Game_2.Snake
             _timer.Enabled = true;
         }
 
-        
+        private void _initTimer2()
+        {
+            _timer2 = new Timer(1000);
+            _timer2.Elapsed += PreviousPosLogic;
+            _timer2.AutoReset = true;
+            _timer2.Enabled = true;
+        }
+
+        public abstract void PreviousPosLogic(Object source, ElapsedEventArgs e);
        
         public abstract void MoveSnake(Object source, ElapsedEventArgs e);
 
