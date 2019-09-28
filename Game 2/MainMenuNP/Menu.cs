@@ -16,9 +16,9 @@ namespace Game_2.MainMenuNP
 
         private Texture2D _background;
 
-        private Texture2D _buttonTexture;
+        protected Texture2D _buttonTexture;
 
-        private SpriteFont _font;
+        protected SpriteFont _font;
         
         #endregion
 
@@ -36,11 +36,11 @@ namespace Game_2.MainMenuNP
         {
         }
 
-        public void LoadSprites(ContentManager content)
+        public virtual void LoadSprites(ContentManager content)
         {
-            _background = content.Load<Texture2D>("background");
+            _background = content.Load<Texture2D>("Background");
             _buttonTexture = content.Load<Texture2D>("button");
-            _font = content.Load<SpriteFont>("Bebas_Regular");
+            _font = content.Load<SpriteFont>("Arial");
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -48,7 +48,7 @@ namespace Game_2.MainMenuNP
             spriteBatch.Draw(_background, Vector2.Zero, Color.White);
         }
 
-        public virtual void Update()
+        public virtual void Update(GameTime gameTime)
         {
 
         }

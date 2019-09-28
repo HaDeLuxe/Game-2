@@ -1,5 +1,6 @@
 ﻿using Game_2.MainMenuNP;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,7 @@ namespace Game_2
     class WindowManager
     {
         #region fields
-
-        private windows _currentWindow;
+        
 
         private MainMenu _mainMenu;
 
@@ -36,28 +36,40 @@ namespace Game_2
 
         #region properties
 
+        public windows _currentWindow { get; set; }
+
         #endregion
 
 
 
         #region methods
 
-        public WindowManager()
+        public WindowManager(Game1 game1)
         {
             _currentWindow = windows.MAINMENU;
 
-            _mainMenu = new MainMenu();
+            _mainMenu = new MainMenu(game1, this);
 
             _lobby = new Lobby();
 
+            _gameManager = new GameManager();
         }
 
-        public void Update()
+        public void LoadContent(ContentManager Content)
+        {
+            _mainMenu.LoadSprites(Content);
+            _lobby.LoadSprites(Content);
+            _gameManager.LoadContent(Content);
+            _mainMenu.createButtons();
+
+        }
+
+        public void Update(GameTime gameTime)
         {
             switch (_currentWindow)
             {
                 case windows.MAINMENU:
-
+                    _mainMenu.Update(gameTime);
                     break;
                 case windows.LOBBY:
 
