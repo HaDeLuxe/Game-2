@@ -31,13 +31,15 @@ namespace Game_2
         private Lobby _lobby;
 
 
+
+
         #endregion
 
 
 
         #region properties
 
-        public windows _currentWindow { get; set; }
+        public windows CurrentWindow { get; set; }
 
         #endregion
 
@@ -47,7 +49,7 @@ namespace Game_2
 
         public WindowManager(Game1 game1, Server pServer, Client pClient)
         {
-            _currentWindow = windows.MAINMENU;
+            CurrentWindow = windows.PLAYFIELD;
 
             _mainMenu = new MainMenu(game1, this);
 
@@ -69,7 +71,7 @@ namespace Game_2
 
         public void Update(GameTime gameTime)
         {
-            switch (_currentWindow)
+            switch (CurrentWindow)
             {
                 case windows.MAINMENU:
                     _mainMenu.Update(gameTime);
@@ -78,14 +80,14 @@ namespace Game_2
                     _lobby.Update(gameTime);
                     break;
                 case windows.PLAYFIELD:
-
+                    _gameManager.Update(gameTime);
                     break;
             }
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            switch (_currentWindow)
+            switch (CurrentWindow)
             {
                 case windows.MAINMENU:
                     _mainMenu.Draw(gameTime, spriteBatch);
@@ -94,7 +96,7 @@ namespace Game_2
                     _lobby.Draw(gameTime, spriteBatch);
                     break;
                 case windows.PLAYFIELD:
-
+                    _gameManager.Draw(gameTime, spriteBatch);
                     break;
             }
         }

@@ -47,7 +47,7 @@ namespace Game_2.Snake
 
         #region methods
 
-        protected PlayerComponent(Texture2D pTexture, Vector2 pPosition, float pRotation)
+        public PlayerComponent(Texture2D pTexture, Vector2 pPosition, float pRotation)
         {
             _texture2D = pTexture;
             _initTimer();

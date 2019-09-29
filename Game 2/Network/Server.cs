@@ -100,7 +100,6 @@ namespace Game_2.Network
                 case sendMessageType.GET_NUMBER_PLAYER_IN_GAME:
                     msg.Write("Numbers of players in Game: " + netGame1.numberOfPlayer.ToString());
                     _server.SendMessage(msg, pReceiver, NetDeliveryMethod.ReliableOrdered);
-
                     break;
             }
         }

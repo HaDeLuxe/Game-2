@@ -68,7 +68,7 @@ namespace Game_2.MainMenuNP
 
         private void _enterLobbyButton(object sender, System.EventArgs e)
         {
-            _windowManager._currentWindow = windows.LOBBY;
+            _windowManager.CurrentWindow = windows.LOBBY;
         }
 
         /// <summary>

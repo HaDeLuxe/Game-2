@@ -40,6 +40,7 @@ namespace Game_2.MainMenuNP
         private Button _openServerButton;
         private Button _joinServerButton;
         private Button _joinGameButton;
+        private Button _openGameButton;
 
         #endregion
 
