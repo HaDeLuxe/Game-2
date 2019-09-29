@@ -65,10 +65,8 @@
     <Compile Include="MainMenuNP\MainMenu.cs" />
     <Compile Include="MainMenuNP\Menu.cs" />
     <Compile Include="Network\Client.cs" />
-    <Compile Include="Network\NetworkGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Network\Server.cs" />
     <Compile Include="Snake\Body.cs" />
     <Compile Include="Snake\Head.cs" />
     <Compile Include="Snake\PlayerComponent.cs" />

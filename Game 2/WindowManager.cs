@@ -47,13 +47,13 @@ namespace Game_2
 
         #region methods
 
-        public WindowManager(Game1 game1, Server pServer, Client pClient)
+        public WindowManager(Game1 game1, Client pClient)
         {
             CurrentWindow = windows.MAINMENU;
 
             _mainMenu = new MainMenu(game1, this);
 
-            _lobby = new Lobby(this, pServer, pClient, game1);
+            _lobby = new Lobby(this, pClient, game1);
 
             _gameManager = new GameManager();
         }

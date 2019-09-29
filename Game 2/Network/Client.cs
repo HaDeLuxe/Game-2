@@ -17,12 +17,15 @@ namespace Game_2.Network
             PLAYER_COUNT_1,
             PLAYER_COUNT_2,
             PLAYER_COUNT_0,
+            JOINED_GAME_SUCCESS,
+            JOINED_GAME_FAILURE,
             NOT_SPECIFIC
         }
 
         public enum sendMsgType
         {
             CONNECT_TO_GAME,
+            ENTER_GAME,
             GET_NUMBER_PLAYER_IN_GAME
         }
 
@@ -76,6 +79,11 @@ namespace Game_2.Network
                                 return MsgType.PLAYER_COUNT_1;
                             case "Numbers of players in Game: 0":
                                 return MsgType.PLAYER_COUNT_0;
+                            case "JOINED_GAME_SUCCESS":
+                                return MsgType.JOINED_GAME_SUCCESS;
+                            case "JOINED_GAME_FAILURE":
+                                return MsgType.JOINED_GAME_FAILURE;
+
                         }
                             //handle custom messages
                             return MsgType.NOT_SPECIFIC;

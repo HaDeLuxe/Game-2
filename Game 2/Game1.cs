@@ -18,15 +18,9 @@ namespace Game_2
         SpriteBatch spriteBatch;
 
         private WindowManager _windowManager;
-
-        private Server _server;
-
-        public bool ServerRunning { get; set; }
-
+        
         private Client _client;
-
-       
-
+        
         public Game1()
         {
             GraphicsDeviceManager graphics;
@@ -38,9 +32,6 @@ namespace Game_2
             graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 900;   // set this value to the desired height of your window
 
-
-            ServerRunning = false;
-            _server = new Server();
             
 
             _client = new Client();
@@ -57,7 +48,7 @@ namespace Game_2
         protected override void Initialize()
         {
 
-            _windowManager = new WindowManager(this, _server, _client);
+            _windowManager = new WindowManager(this, _client);
 
             base.Initialize();
         }
@@ -95,8 +86,6 @@ namespace Game_2
                 ExitProgram();
 
             _windowManager.Update(gameTime);
-            if(ServerRunning)
-                _server.checkForMessages();
             base.Update(gameTime);
         }
 
