@@ -23,6 +23,7 @@ namespace Game_2.MainMenuNP
         #endregion
 
 
+
         #region methods
 
         public MainMenu(Game1 pGame1, WindowManager pWindowManager)
