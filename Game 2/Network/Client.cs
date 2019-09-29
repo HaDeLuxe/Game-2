@@ -36,8 +36,7 @@ namespace Game_2.Network
 
 
         #region properties
-
-        public int playerID;
+        
 
         #endregion
 
@@ -108,7 +107,7 @@ namespace Game_2.Network
 
         public void checkForServer()
         {
-            _client.DiscoverLocalPeers(12345);
+            _client.DiscoverKnownPeer("127.0.0.1", 12345);
         }
 
         public void sendMsg(sendMsgType pSendMsgType)

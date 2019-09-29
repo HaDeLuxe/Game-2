@@ -49,7 +49,7 @@ namespace Game_2
 
         public WindowManager(Game1 game1, Server pServer, Client pClient)
         {
-            CurrentWindow = windows.PLAYFIELD;
+            CurrentWindow = windows.MAINMENU;
 
             _mainMenu = new MainMenu(game1, this);
 
