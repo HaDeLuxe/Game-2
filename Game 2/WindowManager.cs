@@ -51,7 +51,7 @@ namespace Game_2
 
             _mainMenu = new MainMenu(game1, this);
 
-            _lobby = new Lobby(this, pServer, pClient);
+            _lobby = new Lobby(this, pServer, pClient, game1);
 
             _gameManager = new GameManager();
         }

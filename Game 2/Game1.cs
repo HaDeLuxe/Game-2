@@ -12,16 +12,20 @@ namespace Game_2
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Game1 : Microsoft.Xna.Framework.Game
     {
         
         SpriteBatch spriteBatch;
 
         private WindowManager _windowManager;
 
-        private Server server;
+        private Server _server;
 
-        private Client client;
+        public bool ServerRunning { get; set; }
+
+        private Client _client;
+
+       
 
         public Game1()
         {
@@ -34,11 +38,13 @@ namespace Game_2
             graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 900;   // set this value to the desired height of your window
 
-            server = new Server();
+
+            ServerRunning = false;
+            _server = new Server();
             
 
-            client = new Client();
-            client.startClient();
+            _client = new Client();
+            _client.startClient();
             
         }
 
@@ -51,7 +57,7 @@ namespace Game_2
         protected override void Initialize()
         {
 
-            _windowManager = new WindowManager(this, server, client);
+            _windowManager = new WindowManager(this, _server, _client);
 
             base.Initialize();
         }
@@ -89,7 +95,8 @@ namespace Game_2
                 ExitProgram();
 
             _windowManager.Update(gameTime);
-
+            if(ServerRunning)
+                _server.checkForMessages();
             base.Update(gameTime);
         }
 
