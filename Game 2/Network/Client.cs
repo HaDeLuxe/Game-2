@@ -22,11 +22,14 @@ namespace Game_2.Network
             NOT_SPECIFIC
         }
 
-        public enum sendMsgType
+        public enum SendMsgType
         {
             CONNECT_TO_GAME,
             ENTER_GAME,
-            GET_NUMBER_PLAYER_IN_GAME
+            GET_NUMBER_PLAYER_IN_GAME,
+            SEND_PLAYER_POS,
+            SEND_BODY_POS,
+
         }
 
 
@@ -45,7 +48,7 @@ namespace Game_2.Network
 
         #region methods
 
-        public void startClient()
+        public void StartClient()
         {
             NetPeerConfiguration config = new NetPeerConfiguration("Game 2");
             _client = new NetClient(config);
@@ -54,13 +57,13 @@ namespace Game_2.Network
 
         }
 
-        public void connectToServer()
+        public void ConnectToServer()
         {
             _client.Connect(host: "127.0.0.1", port: 12345);
         }
         
 
-        public MsgType checkForMessages()
+        public MsgType CheckForMessages()
         {
             NetIncomingMessage msg;
             while ((msg = _client.ReadMessage()) != null)
@@ -113,20 +116,20 @@ namespace Game_2.Network
 
         
 
-        public void checkForServer()
+        public void CheckForServer()
         {
             _client.DiscoverKnownPeer("127.0.0.1", 12345);
         }
 
-        public void sendMsg(sendMsgType pSendMsgType)
+        public void SendMsg(SendMsgType pSendMsgType)
         {
             var message = _client.CreateMessage();
             switch (pSendMsgType)
             {
-                case sendMsgType.CONNECT_TO_GAME:
+                case SendMsgType.CONNECT_TO_GAME:
                     message.Write("Connect To Game");
                     break;
-                case sendMsgType.GET_NUMBER_PLAYER_IN_GAME:
+                case SendMsgType.GET_NUMBER_PLAYER_IN_GAME:
                     message.Write("Get number of players in Game");
                     break;
             }

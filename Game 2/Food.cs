@@ -13,8 +13,7 @@ namespace Game_2
 
         #region fields
 
-        private Texture2D _texture2D;
-
+        private readonly Texture2D _texture2D;
         #endregion
 
         #region properties

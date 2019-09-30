@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Game_2
 {
 
-    public enum windows {
+    public enum Windows {
         MAINMENU,
         LOBBY,
         PLAYFIELD
@@ -24,11 +24,11 @@ namespace Game_2
         #region fields
         
 
-        private MainMenu _mainMenu;
+        private readonly MainMenu _mainMenu;
 
-        private GameManager _gameManager;
+        private readonly GameManager _gameManager;
 
-        private Lobby _lobby;
+        private readonly Lobby _lobby;
 
 
 
@@ -39,7 +39,7 @@ namespace Game_2
 
         #region properties
 
-        public windows CurrentWindow { get; set; }
+        public Windows CurrentWindow { get; set; }
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace Game_2
 
         public WindowManager(Game1 game1, Client pClient)
         {
-            CurrentWindow = windows.MAINMENU;
+            CurrentWindow = Windows.MAINMENU;
 
             _mainMenu = new MainMenu(game1, this);
 
@@ -64,7 +64,7 @@ namespace Game_2
             _lobby.LoadSprites(Content);
             _gameManager.LoadContent(Content);
             _mainMenu.createButtons();
-            _lobby.createButtons();
+            _lobby.CreateButtons();
             
 
         }
@@ -73,13 +73,13 @@ namespace Game_2
         {
             switch (CurrentWindow)
             {
-                case windows.MAINMENU:
+                case Windows.MAINMENU:
                     _mainMenu.Update(gameTime);
                     break;
-                case windows.LOBBY:
+                case Windows.LOBBY:
                     _lobby.Update(gameTime);
                     break;
-                case windows.PLAYFIELD:
+                case Windows.PLAYFIELD:
                     _gameManager.Update(gameTime);
                     break;
             }
@@ -89,13 +89,13 @@ namespace Game_2
         {
             switch (CurrentWindow)
             {
-                case windows.MAINMENU:
+                case Windows.MAINMENU:
                     _mainMenu.Draw(gameTime, spriteBatch);
                     break;
-                case windows.LOBBY:
+                case Windows.LOBBY:
                     _lobby.Draw(gameTime, spriteBatch);
                     break;
-                case windows.PLAYFIELD:
+                case Windows.PLAYFIELD:
                     _gameManager.Draw(gameTime, spriteBatch);
                     break;
             }

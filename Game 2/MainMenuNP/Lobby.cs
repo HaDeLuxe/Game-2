@@ -22,7 +22,7 @@ namespace Game_2.MainMenuNP
 
         #region fields
 
-        private WindowManager _windowManager;
+        private readonly WindowManager _windowManager;
 
         private bool _connectedToServer;
 
@@ -31,14 +31,13 @@ namespace Game_2.MainMenuNP
         private bool _enteredGame;
         
         
-        private Client _client;
+        private readonly Client _client;
 
-        private Game1 _game1;
+        private readonly Game1 _game1;
         
 
         #region buttons
-
-        private Button _openServerButton;
+        
         private Button _joinServerButton;
         private Button _joinGameButton;
         private Button _openGameButton;
@@ -68,39 +67,45 @@ namespace Game_2.MainMenuNP
             netWorkGame1 = new NetworkGame();
         }
 
-        public void createButtons()
+        public void CreateButtons()
         {
 
-            _joinServerButton = new Button(_buttonTexture, _font);
-            _joinServerButton.Text = "Join Server";
-            _joinServerButton.Position = new Vector2(900, 500);
+            _joinServerButton = new Button(_buttonTexture, _font)
+            {
+                Text = "Join Server",
+                Position = new Vector2(900, 500)
+            };
             _joinServerButton.Click += _joinServer;
 
-            _joinGameButton = new Button(_buttonTexture, _font);
-            _joinGameButton.Text = "Join Game";
-            _joinGameButton.Position = new Vector2(700, 195);
+            _joinGameButton = new Button(_buttonTexture, _font)
+            {
+                Text = "Join Game",
+                Position = new Vector2(700, 195)
+            };
             _joinGameButton.Click += _connectNetworkGame1;
 
-            _openGameButton = new Button(_buttonTexture, _font);
-            _openGameButton.Text = "Enter Game";
-            _openGameButton.Position = new Vector2(700, 195);
+            _openGameButton = new Button(_buttonTexture, _font)
+            {
+                Text = "Enter Game",
+                Position = new Vector2(700, 195)
+            };
             _openGameButton.Click += _openGame;
         }
         
         private void _joinServer(object sender, System.EventArgs e)
         {
-            _client.connectToServer();
+            _client.ConnectToServer();
         }
 
         private void _connectNetworkGame1(object sender, System.EventArgs e)
         {
-            _client.sendMsg(Client.sendMsgType.CONNECT_TO_GAME);
+            _client.SendMsg(Client.SendMsgType.CONNECT_TO_GAME);
         }
 
         private void _openGame(object sender, System.EventArgs e)
         {
-            _client.sendMsg(Client.sendMsgType.ENTER_GAME);
-            _windowManager.CurrentWindow = windows.PLAYFIELD;
+            _client.SendMsg(Client.SendMsgType.ENTER_GAME);
+            _windowManager.CurrentWindow = Windows.PLAYFIELD;
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -129,14 +134,14 @@ namespace Game_2.MainMenuNP
             base.Update(gameTime);
 
             if (!_serverAvailable)
-                _client.checkForServer();
+                _client.CheckForServer();
 
             if (_connectedToServer)
             {
-                _client.sendMsg(Client.sendMsgType.GET_NUMBER_PLAYER_IN_GAME);
+                _client.SendMsg(Client.SendMsgType.GET_NUMBER_PLAYER_IN_GAME);
             }
 
-            Client.MsgType var = _client.checkForMessages();
+            Client.MsgType var = _client.CheckForMessages();
             switch (var)
             {
                 case Client.MsgType.CLIENT_CONNECTED:
@@ -171,7 +176,7 @@ namespace Game_2.MainMenuNP
             else
                 _openGameButton.update(gameTime);
             if (!_serverAvailable)
-                _client.checkForServer();
+                _client.CheckForServer();
             
         }
 

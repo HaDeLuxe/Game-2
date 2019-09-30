@@ -19,7 +19,7 @@ namespace Game_2
 
         private WindowManager _windowManager;
         
-        private Client _client;
+        private readonly Client _client;
         
         public Game1()
         {
@@ -35,7 +35,7 @@ namespace Game_2
             
 
             _client = new Client();
-            _client.startClient();
+            _client.StartClient();
             
         }
 
@@ -72,7 +72,6 @@ namespace Game_2
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         /// <summary>

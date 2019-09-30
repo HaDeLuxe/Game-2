@@ -16,9 +16,8 @@ namespace Game_2
         #region fields
 
         private List<PlayerComponent> _player1List;
-        private List<PlayerComponent> _player2List;
 
-        private List<Food> _foodList;
+        private readonly List<Food> _foodList;
 
         private Texture2D _snake_Head_Pl1_Texture;
 
@@ -44,7 +43,6 @@ namespace Game_2
         public GameManager()
         {
             _player1List = new List<PlayerComponent>();
-            _player2List = new List<PlayerComponent>();
             _foodList = new List<Food>();
         }
 
@@ -54,35 +52,24 @@ namespace Game_2
             _snake_Head_Pl1_Texture = Content.Load<Texture2D>("snakeRobot_head_purple");
             _snake_Head_Pl2_Texture = Content.Load<Texture2D>("snakeRobot_head_red");
             _snake_Body_Pl1_Texture = Content.Load<Texture2D>("snakeRobot_link_purple");
-            _snake_Head_Pl2_Texture = Content.Load<Texture2D>("snakeRobot_link_red");
+            _snake_Body_Pl2_Texture = Content.Load<Texture2D>("snakeRobot_link_red");
 
             _food_Texture = Content.Load<Texture2D>("Food");
 
-            _player1List.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(50, 50), 0));
-            _player2List.Add(new Head(_snake_Head_Pl2_Texture, new Vector2(1000, 150), 0));
+            _player1List.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(50, 50), (float)Math.PI/2));
 
             _foodList.Add(new Food(_food_Texture, new Vector2(200, 200)));
         }
 
         public void Update(GameTime gameTime)
         {
-            #region player1
-
             if (Keyboard.GetState().IsKeyDown(Keys.D)) _player1List[0].Rotation += (float)Math.PI / 48;
             if (Keyboard.GetState().IsKeyDown(Keys.A)) _player1List[0].Rotation -= (float)Math.PI / 48;
 
             _updatePlayer(_player1List, gameTime, 1);
+            
 
-            #endregion
-
-            #region player2
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) _player2List[0].Rotation += (float)Math.PI / 48;
-            if (Keyboard.GetState().IsKeyDown(Keys.Left)) _player2List[0].Rotation -= (float)Math.PI / 48;
-
-            _updatePlayer(_player2List, gameTime, 2);
-
-            #endregion
+           
         }
 
 
@@ -124,15 +111,7 @@ namespace Game_2
             }
             _player1List.Reverse();
 
-            _player2List.Reverse();
-            foreach (PlayerComponent playerComponent in _player2List)
-            {
-                playerComponent.Draw(gameTime, spriteBatch);
-            }
-            _player2List.Reverse();
-
-
-
+           
             foreach (Food food in _foodList)
             {
                 food.Draw(gameTime, spriteBatch);
