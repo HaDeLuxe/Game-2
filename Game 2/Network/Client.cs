@@ -51,13 +51,13 @@ namespace Game_2.Network
         public void StartClient()
         {
             NetPeerConfiguration config = new NetPeerConfiguration("Game 2");
-            //config.EnableUPnP = true;
+            config.EnableUPnP = true;
             _client = new NetClient(config);
             _client.Start();
             config.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
 
             // attempt to forward port 14242
-            //_client.UPnP.ForwardPort(12345, "Text detail here");
+            _client.UPnP.ForwardPort(12345, "Text detail here");
 
         }
 
