@@ -47,15 +47,12 @@ namespace Game_2.MainMenuNP
 
         #endregion
 
-
-
         #region properties
 
         public NetworkGame netWorkGame1;
 
         #endregion
-
-
+        
         #region methods
 
         public Lobby(WindowManager pWindowManager, Client pClient, Game1 pGame1)

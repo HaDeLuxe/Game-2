@@ -29,6 +29,7 @@ namespace Game_2.Network
             GET_NUMBER_PLAYER_IN_GAME,
             SEND_PLAYER_POS,
             SEND_BODY_POS,
+            JOIN_SERVER
 
         }
 
@@ -57,13 +58,14 @@ namespace Game_2.Network
             config.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
 
             // attempt to forward port 14242
-            _client.UPnP.ForwardPort(12345, "Text detail here");
+            _client.UPnP.ForwardPort(8080, "Text detail here");
 
         }
 
         public void ConnectToServer()
         {
-            _client.Connect(host: "127.0.0.1", port: 12345);
+            _client.Connect(host: "46.5.136.36", port: 8080);
+            SendMsg(SendMsgType.JOIN_SERVER);
         }
         
 
@@ -122,7 +124,7 @@ namespace Game_2.Network
 
         public void CheckForServer()
         {
-            _client.DiscoverKnownPeer("127.0.0.1", 12345);
+            _client.DiscoverKnownPeer("127.0.0.1", 8080);
         }
 
         public void SendMsg(SendMsgType pSendMsgType)
@@ -135,6 +137,9 @@ namespace Game_2.Network
                     break;
                 case SendMsgType.GET_NUMBER_PLAYER_IN_GAME:
                     message.Write("Get number of players in Game");
+                    break;
+                case SendMsgType.JOIN_SERVER:
+                    message.Write("JOIN_SERVER");
                     break;
             }
             _client.SendMessage(message, NetDeliveryMethod.ReliableOrdered);
