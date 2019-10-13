@@ -19,7 +19,7 @@ namespace Game_2
 
         private WindowManager _windowManager;
         
-        private readonly Client _client;
+        private Client _client;
         
         public Game1()
         {
@@ -31,12 +31,6 @@ namespace Game_2
 
             graphics.PreferredBackBufferWidth = 1200;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 900;   // set this value to the desired height of your window
-
-            
-
-            _client = new Client();
-            _client.StartClient();
-            
         }
 
         /// <summary>
@@ -47,8 +41,12 @@ namespace Game_2
         /// </summary>
         protected override void Initialize()
         {
+            _client = new Client();
+            _client.StartClient();
 
             _windowManager = new WindowManager(this, _client);
+
+
 
             base.Initialize();
         }
@@ -83,7 +81,6 @@ namespace Game_2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 ExitProgram();
-
             _windowManager.Update(gameTime);
             base.Update(gameTime);
         }

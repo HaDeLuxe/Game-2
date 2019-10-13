@@ -39,8 +39,8 @@ namespace Game_2.MainMenuNP
         #region buttons
         
         private Button _joinServerButton;
-        private Button _joinGameButton;
-        private Button _openGameButton;
+        private Button _connectNetworkButton;
+        private Button _enterGameButton;
 
         #endregion
 
@@ -74,19 +74,19 @@ namespace Game_2.MainMenuNP
             };
             _joinServerButton.Click += _joinServer;
 
-            _joinGameButton = new Button(_buttonTexture, _font)
+            _connectNetworkButton = new Button(_buttonTexture, _font)
             {
                 Text = "Join Game",
                 Position = new Vector2(700, 195)
             };
-            _joinGameButton.Click += _connectNetworkGame1;
+            _connectNetworkButton.Click += _connectNetworkGame1;
 
-            _openGameButton = new Button(_buttonTexture, _font)
+            _enterGameButton = new Button(_buttonTexture, _font)
             {
                 Text = "Enter Game",
                 Position = new Vector2(700, 195)
             };
-            _openGameButton.Click += _openGame;
+            _enterGameButton.Click += _enterGame;
         }
         
         private void _joinServer(object sender, System.EventArgs e)
@@ -96,12 +96,12 @@ namespace Game_2.MainMenuNP
 
         private void _connectNetworkGame1(object sender, System.EventArgs e)
         {
-            _client.SendMsg(Client.SendMsgType.CONNECT_TO_GAME);
+            _client.SendMsg(Client.SendMessageType.CONNECT_TO_GAME);
         }
 
-        private void _openGame(object sender, System.EventArgs e)
+        private void _enterGame(object sender, System.EventArgs e)
         {
-            _client.SendMsg(Client.SendMsgType.ENTER_GAME);
+            _client.SendMsg(Client.SendMessageType.ENTER_GAME);
             _windowManager.CurrentWindow = Windows.PLAYFIELD;
         }
 
@@ -110,9 +110,9 @@ namespace Game_2.MainMenuNP
             base.Draw(gameTime, spriteBatch);
 
             if (!_enteredGame)
-                _joinGameButton.draw(gameTime, spriteBatch);
+                _connectNetworkButton.draw(gameTime, spriteBatch);
             else
-                _openGameButton.draw(gameTime, spriteBatch);
+                _enterGameButton.draw(gameTime, spriteBatch);
             if(!_connectedToServer)
                 _joinServerButton.draw(gameTime, spriteBatch);
 
@@ -135,10 +135,10 @@ namespace Game_2.MainMenuNP
 
             if (_connectedToServer)
             {
-                _client.SendMsg(Client.SendMsgType.GET_NUMBER_PLAYER_IN_GAME);
+                _client.SendMsg(Client.SendMessageType.GET_NUMBER_PLAYER_IN_GAME);
             }
 
-            Client.MsgType var = _client.CheckForMessages();
+            Client.MsgType var = _client.CheckForMessagesLobby();
             switch (var)
             {
                 case Client.MsgType.CLIENT_CONNECTED:
@@ -169,9 +169,9 @@ namespace Game_2.MainMenuNP
             if(!_connectedToServer)
                 _joinServerButton.update(gameTime);
             if (!_enteredGame)
-                _joinGameButton.update(gameTime);
+                _connectNetworkButton.update(gameTime);
             else
-                _openGameButton.update(gameTime);
+                _enterGameButton.update(gameTime);
             if (!_serverAvailable)
                 _client.CheckForServer();
             

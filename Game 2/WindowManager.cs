@@ -25,8 +25,7 @@ namespace Game_2
         
 
         private readonly MainMenu _mainMenu;
-
-        private readonly GameManager _gameManager;
+        
 
         private readonly Lobby _lobby;
 
@@ -40,6 +39,8 @@ namespace Game_2
         #region properties
 
         public Windows CurrentWindow { get; set; }
+
+        public GameManager GameManager { get; set; }
 
         #endregion
 
@@ -55,14 +56,14 @@ namespace Game_2
 
             _lobby = new Lobby(this, pClient, game1);
 
-            _gameManager = new GameManager();
+            GameManager = new GameManager(pClient);
         }
 
         public void LoadContent(ContentManager Content)
         {
             _mainMenu.LoadSprites(Content);
             _lobby.LoadSprites(Content);
-            _gameManager.LoadContent(Content);
+            GameManager.LoadContent(Content);
             _mainMenu.createButtons();
             _lobby.CreateButtons();
             
@@ -75,12 +76,15 @@ namespace Game_2
             {
                 case Windows.MAINMENU:
                     _mainMenu.Update(gameTime);
+
                     break;
                 case Windows.LOBBY:
                     _lobby.Update(gameTime);
+                    GameManager.Update(gameTime);
+
                     break;
                 case Windows.PLAYFIELD:
-                    _gameManager.Update(gameTime);
+                    GameManager.Update(gameTime);
                     break;
             }
         }
@@ -96,7 +100,7 @@ namespace Game_2
                     _lobby.Draw(gameTime, spriteBatch);
                     break;
                 case Windows.PLAYFIELD:
-                    _gameManager.Draw(gameTime, spriteBatch);
+                    GameManager.Draw(gameTime, spriteBatch);
                     break;
             }
         }

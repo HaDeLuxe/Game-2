@@ -1,4 +1,6 @@
-﻿using Lidgren.Network;
+﻿using Game_2.Snake;
+using Lidgren.Network;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Game_2.Network
 {
+
 
     class Client
     {
@@ -22,13 +25,15 @@ namespace Game_2.Network
             NOT_SPECIFIC
         }
 
-        public enum SendMsgType
+        public enum SendMessageType
         {
             CONNECT_TO_GAME,
             ENTER_GAME,
             GET_NUMBER_PLAYER_IN_GAME,
             SEND_PLAYER_POS,
             SEND_BODY_POS,
+            INPUT_LEFT,
+            INPUT_RIGHT,
             JOIN_SERVER
 
         }
@@ -38,12 +43,14 @@ namespace Game_2.Network
 
         private NetClient _client;
 
+      
 
         #endregion
 
 
         #region properties
         
+        public short PlayerNumber { get; set; }
 
         #endregion
 
@@ -56,20 +63,21 @@ namespace Game_2.Network
             _client = new NetClient(config);
             _client.Start();
             config.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
-
-            // attempt to forward port 14242
-            _client.UPnP.ForwardPort(8080, "Text detail here");
+            
+            
 
         }
 
+       
         public void ConnectToServer()
         {
-            _client.Connect(host: "46.5.136.36", port: 8080);
-            SendMsg(SendMsgType.JOIN_SERVER);
+            
+            _client.Connect(host: "127.0.0.1", port: 8080);
+            SendMsg(SendMessageType.JOIN_SERVER);
         }
         
 
-        public MsgType CheckForMessages()
+        public MsgType CheckForMessagesLobby()
         {
             NetIncomingMessage msg;
             while ((msg = _client.ReadMessage()) != null)
@@ -80,6 +88,7 @@ namespace Game_2.Network
                             return MsgType.SERVER_ONLINE;
                     case NetIncomingMessageType.Data:
                         string data = msg.ReadString();
+
                         switch (data)
                         {
                             case "Numbers of players in Game: 2":
@@ -88,11 +97,14 @@ namespace Game_2.Network
                                 return MsgType.PLAYER_COUNT_1;
                             case "Numbers of players in Game: 0":
                                 return MsgType.PLAYER_COUNT_0;
-                            case "JOINED_GAME_SUCCESS":
+                            case "JOINED_GAME_SUCCESS_PLAYER_1":
+                                PlayerNumber = 1;
+                                return MsgType.JOINED_GAME_SUCCESS;
+                            case "JOINED_GAME_SUCCESS_PLAYER_2":
+                                PlayerNumber = 2;
                                 return MsgType.JOINED_GAME_SUCCESS;
                             case "JOINED_GAME_FAILURE":
                                 return MsgType.JOINED_GAME_FAILURE;
-
                         }
                             //handle custom messages
                             return MsgType.NOT_SPECIFIC;
@@ -120,29 +132,103 @@ namespace Game_2.Network
             return MsgType.NOT_SPECIFIC;
         }
 
-        
+        public MsgType CheckForMessagesGameManager(List<PlayerComponent> pPlayerList)
+        {
+            NetIncomingMessage msg;
+            while ((msg = _client.ReadMessage()) != null)
+            {
+                switch (msg.MessageType)
+                {
+                    case NetIncomingMessageType.DiscoveryResponse:
+                        return MsgType.SERVER_ONLINE;
+                    case NetIncomingMessageType.Data:
+                        string data = msg.ReadString();
+
+                        switch (data)
+                        {
+                            case "MOVE":
+                                int y = (int)pPlayerList[0].CurrentPosition.Y;
+                                pPlayerList[0].CurrentPosition = new Vector2(msg.ReadVariableInt32(), y);
+                                int x = (int)pPlayerList[0].CurrentPosition.X;
+                                pPlayerList[0].CurrentPosition = new Vector2(x, msg.ReadVariableInt32());
+                                pPlayerList[0].Rotation = msg.ReadFloat();
+
+
+                                return MsgType.NOT_SPECIFIC;
+                        }
+                        //handle custom messages
+                        return MsgType.NOT_SPECIFIC;
+                    case NetIncomingMessageType.StatusChanged:
+                        //handle connection status mesasages
+                        switch (msg.SenderConnection.Status)
+                        {
+                            case NetConnectionStatus.Connected:
+                                return MsgType.CLIENT_CONNECTED;
+                            default:
+                                return MsgType.NOT_SPECIFIC;
+                        }
+                    case NetIncomingMessageType.DebugMessage:
+                        //handle Debug messages
+                        //only received when compiled in DEBUG mode
+                        Console.WriteLine(msg.ReadString());
+                        return MsgType.NOT_SPECIFIC;
+
+                    default:
+                        Console.WriteLine("unhandled message with type: " + msg.MessageType);
+                        return MsgType.NOT_SPECIFIC;
+                }
+
+            }
+            return MsgType.NOT_SPECIFIC;
+        }
+
+
 
         public void CheckForServer()
         {
             _client.DiscoverKnownPeer("127.0.0.1", 8080);
         }
 
-        public void SendMsg(SendMsgType pSendMsgType)
+        public void SendMsg(SendMessageType pSendMsgType)
         {
             var message = _client.CreateMessage();
             switch (pSendMsgType)
             {
-                case SendMsgType.CONNECT_TO_GAME:
+                case SendMessageType.CONNECT_TO_GAME:
                     message.Write("Connect To Game");
                     break;
-                case SendMsgType.GET_NUMBER_PLAYER_IN_GAME:
+                case SendMessageType.GET_NUMBER_PLAYER_IN_GAME:
                     message.Write("Get number of players in Game");
                     break;
-                case SendMsgType.JOIN_SERVER:
-                    message.Write("JOIN_SERVER");
+                case SendMessageType.JOIN_SERVER:
+                    break;
+                case SendMessageType.ENTER_GAME:
+                    message.Write("ENTER_GAME");
                     break;
             }
             _client.SendMessage(message, NetDeliveryMethod.ReliableOrdered);
+        }
+
+        /// <summary>
+        /// Server Sided Network Messages while Main Game is running
+        /// </summary>
+        /// <param name="pSendMsgType"></param>
+        /// <param name="pReceiver"></param>
+        public void SendMainGameMsg(SendMessageType pSendMsgType)
+        {
+            var msg = _client.CreateMessage();
+            {
+                switch (pSendMsgType)
+                {
+                    case SendMessageType.INPUT_LEFT:
+                        msg.Write("LEFT");
+                        break;
+                    case SendMessageType.INPUT_RIGHT:
+                        msg.Write("RIGHT");
+                        break;
+                }
+                _client.SendMessage(msg, NetDeliveryMethod.Unreliable);
+            }
         }
 
 

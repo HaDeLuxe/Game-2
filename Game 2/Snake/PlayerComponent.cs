@@ -50,47 +50,47 @@ namespace Game_2.Snake
         protected PlayerComponent(Texture2D pTexture, Vector2 pPosition, float pRotation)
         {
             _texture2D = pTexture;
-            _initTimer();
-            _initTimer2();
+            //_initTimer();
+            //_initTimer2();
             CurrentPosition = pPosition;
             PreviousPosition = pPosition;
             Rotation = pRotation;
             PreviousRotation = pRotation;
         }
 
-        public void RotateBy(float a)
-        {
-            DirectionVector = new Vector2((float)Math.Cos(a), (float)Math.Sin(a));
-        }
+        //public void RotateBy(float a)
+        //{
+        //    DirectionVector = new Vector2((float)Math.Cos(a), (float)Math.Sin(a));
+        //}
        
-        private void _initTimer()
-        {
-            _timer = new Timer(10);
-            _timer.Elapsed += MoveSnake;
-            _timer.AutoReset = true;
-            _timer.Enabled = true;
-        }
+        //private void _initTimer()
+        //{
+        //    _timer = new Timer(10);
+        //    _timer.Elapsed += MoveSnake;
+        //    _timer.AutoReset = true;
+        //    _timer.Enabled = true;
+        //}
 
-        private void _initTimer2()
-        {
-            _timer2 = new Timer(1000);
-            _timer2.Elapsed += PreviousPosLogic;
-            _timer2.AutoReset = true;
-            _timer2.Enabled = true;
-        }
+        //private void _initTimer2()
+        //{
+        //    _timer2 = new Timer(1000);
+        //    _timer2.Elapsed += PreviousPosLogic;
+        //    _timer2.AutoReset = true;
+        //    _timer2.Enabled = true;
+        //}
 
-        public abstract void PreviousPosLogic(Object source, ElapsedEventArgs e);
+        //public abstract void PreviousPosLogic(Object source, ElapsedEventArgs e);
        
-        public abstract void MoveSnake(Object source, ElapsedEventArgs e);
+        //public abstract void MoveSnake(Object source, ElapsedEventArgs e);
 
         public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
-        public abstract void Update(GameTime gameTime);
+        //public abstract void Update(GameTime gameTime);
 
-        public virtual bool CheckCollision(Rectangle pRectangle)
-        {
-            return false;
-        }
+        //public virtual bool CheckCollision(Rectangle pRectangle)
+        //{
+        //    return false;
+        //}
         
         
 
