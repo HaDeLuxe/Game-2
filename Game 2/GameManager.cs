@@ -38,7 +38,7 @@ namespace Game_2
 
         #region properties
 
-        public List<PlayerComponent> PlayerList { get; set; }
+        public List<PlayerComponent> MainPlayer { get; set; }
 
         public List<PlayerComponent> EnemyPlayer { get; set; }
 
@@ -49,25 +49,29 @@ namespace Game_2
 
         public GameManager(Client pClient)
         {
-            PlayerList = new List<PlayerComponent>();
+            MainPlayer = new List<PlayerComponent>();
+            EnemyPlayer = new List<PlayerComponent>();
             _foodList = new List<Food>();
             _client = pClient;
 
-            PlayerList.Add(new Head(null, new Vector2(0, 0), 0));
+            MainPlayer.Add(new Head(null, new Vector2(0, 0), 0));
         }
 
         public void initGame()
         {
             if (_client.PlayerNumber == 1 && !_headAdded)
             {
-                PlayerList.RemoveAt(0);
-                PlayerList.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(0, 0), 0));
+                MainPlayer.RemoveAt(0);
+                MainPlayer.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(0, 0), 0));
+                EnemyPlayer.Add(new Head(_snake_Head_Pl2_Texture, new Vector2(0, 0), 0));
                 _headAdded = true;
             }
             else if (_client.PlayerNumber == 2 && !_headAdded)
             {
-                PlayerList.RemoveAt(0);
-                PlayerList.Add(new Head(_snake_Head_Pl2_Texture, new Vector2(0, 0), 0));
+                MainPlayer.RemoveAt(0);
+                MainPlayer.Add(new Head(_snake_Head_Pl2_Texture, new Vector2(0, 0), 0));
+                EnemyPlayer.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(0, 0), 0));
+
                 _headAdded = true;
             }
         }
@@ -82,7 +86,6 @@ namespace Game_2
 
             _food_Texture = Content.Load<Texture2D>("Food");
             
-            //else PlayerList.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(0, 0), 0));
 
         }
 
@@ -94,7 +97,7 @@ namespace Game_2
             if (Keyboard.GetState().IsKeyDown(Keys.A))
                 _client.SendMainGameMsg(Client.SendMessageType.INPUT_LEFT);
 
-            _client.CheckForMessagesGameManager(PlayerList);
+            _client.CheckForMessagesGameManager(MainPlayer, EnemyPlayer);
 
             
         }
@@ -133,18 +136,20 @@ namespace Game_2
         {
             if (_client.PlayerNumber != 0)
             {
-                PlayerList.Reverse();
-                foreach (PlayerComponent playerComponent in PlayerList)
+                foreach (PlayerComponent playerComponent in MainPlayer)
                 {
                     playerComponent.Draw(gameTime, spriteBatch);
                 }
-                PlayerList.Reverse();
-
-
-                foreach (Food food in _foodList)
+                foreach(PlayerComponent enemyComponent in EnemyPlayer)
                 {
-                    food.Draw(gameTime, spriteBatch);
+                    enemyComponent.Draw(gameTime, spriteBatch);
                 }
+
+
+                //foreach (Food food in _foodList)
+                //{
+                //    food.Draw(gameTime, spriteBatch);
+                //}
             }
             
         }

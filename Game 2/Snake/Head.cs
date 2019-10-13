@@ -33,37 +33,7 @@ namespace Game_2.Snake
             Console.WriteLine("X: " + CurrentPosition.X + " Y: " + CurrentPosition.Y + " R: " + Rotation);
         }
 
-        //public override void Update(GameTime gameTime)
-        //{
-        //}
-        
-        //public override void MoveSnake(object source, ElapsedEventArgs e)
-        //{
-            
-        //    RotateBy(Rotation);
-        //    DirectionVector.Normalize();
-        //    CurrentPosition -= DirectionVector;
-        //}
-
-        //public override bool CheckCollision(Rectangle pRectangle)
-        //{
-        //    if (Rectangle.Intersects(Rectangle))
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //        return false;
-        //}
-
-        //public override void PreviousPosLogic(object source, ElapsedEventArgs e)
-        //{
-        //    PreviousPosition = CurrentPosition;
-        //    PreviousRotation = Rotation;
-        //}
-
-
-
-
+       
         #endregion
     }
 }
