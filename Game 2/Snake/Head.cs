@@ -25,12 +25,9 @@ namespace Game_2.Snake
         {
         }
 
-
-
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture2D, new Vector2(Rectangle.X, Rectangle.Y), null, Color.White, Rotation, new Vector2(_texture2D.Width / 2f, _texture2D.Height / 2f), 1f, SpriteEffects.None, 0);
-            Console.WriteLine("X: " + CurrentPosition.X + " Y: " + CurrentPosition.Y + " R: " + Rotation);
         }
 
        
