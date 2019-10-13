@@ -103,6 +103,7 @@ namespace Game_2.MainMenuNP
         {
             _client.SendMsg(Client.SendMessageType.ENTER_GAME);
             _windowManager.CurrentWindow = Windows.PLAYFIELD;
+            
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)

@@ -100,9 +100,15 @@ namespace Game_2
                     _lobby.Draw(gameTime, spriteBatch);
                     break;
                 case Windows.PLAYFIELD:
+                    GameManager.initGame();
                     GameManager.Draw(gameTime, spriteBatch);
                     break;
             }
+        }
+
+        public void SetStateToPlayfield()
+        {
+            CurrentWindow = Windows.PLAYFIELD;
         }
 
         #endregion

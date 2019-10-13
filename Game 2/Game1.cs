@@ -45,7 +45,7 @@ namespace Game_2
             _client.StartClient();
 
             _windowManager = new WindowManager(this, _client);
-
+            _client.InitWindowManager(_windowManager);
 
 
             base.Initialize();

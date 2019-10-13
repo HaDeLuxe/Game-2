@@ -43,7 +43,7 @@ namespace Game_2.Network
 
         private NetClient _client;
 
-      
+        private WindowManager _windowManager;
 
         #endregion
 
@@ -56,6 +56,11 @@ namespace Game_2.Network
 
         #region methods
 
+        public void InitWindowManager(WindowManager pWindowManager)
+        {
+            _windowManager = pWindowManager;
+        }
+
         public void StartClient()
         {
             NetPeerConfiguration config = new NetPeerConfiguration("Game 2");
@@ -63,8 +68,8 @@ namespace Game_2.Network
             _client = new NetClient(config);
             _client.Start();
             config.EnableMessageType(NetIncomingMessageType.DiscoveryResponse);
-            
-            
+
+            PlayerNumber = 0;
 
         }
 
@@ -147,10 +152,9 @@ namespace Game_2.Network
                         switch (data)
                         {
                             case "MOVE":
-                                int y = (int)pPlayerList[0].CurrentPosition.Y;
-                                pPlayerList[0].CurrentPosition = new Vector2(msg.ReadVariableInt32(), y);
-                                int x = (int)pPlayerList[0].CurrentPosition.X;
-                                pPlayerList[0].CurrentPosition = new Vector2(x, msg.ReadVariableInt32());
+                                int x = msg.ReadVariableInt32();
+                                int y = msg.ReadVariableInt32();
+                                pPlayerList[0].CurrentPosition = new Vector2(x, y);
                                 pPlayerList[0].Rotation = msg.ReadFloat();
 
 

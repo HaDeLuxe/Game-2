@@ -31,6 +31,8 @@ namespace Game_2
 
         private Client _client = null;
 
+        private bool _headAdded = false;
+
         #endregion
 
 
@@ -50,7 +52,24 @@ namespace Game_2
             PlayerList = new List<PlayerComponent>();
             _foodList = new List<Food>();
             _client = pClient;
-            
+
+            PlayerList.Add(new Head(null, new Vector2(0, 0), 0));
+        }
+
+        public void initGame()
+        {
+            if (_client.PlayerNumber == 1 && !_headAdded)
+            {
+                PlayerList.RemoveAt(0);
+                PlayerList.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(0, 0), 0));
+                _headAdded = true;
+            }
+            else if (_client.PlayerNumber == 2 && !_headAdded)
+            {
+                PlayerList.RemoveAt(0);
+                PlayerList.Add(new Head(_snake_Head_Pl2_Texture, new Vector2(0, 0), 0));
+                _headAdded = true;
+            }
         }
 
         public void LoadContent(ContentManager Content)
@@ -62,22 +81,22 @@ namespace Game_2
             _snake_Body_Pl2_Texture = Content.Load<Texture2D>("snakeRobot_link_red");
 
             _food_Texture = Content.Load<Texture2D>("Food");
-            if(_client.PlayerNumber == 1)
-                PlayerList.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(0, 0), 0));
-            else if(_client.PlayerNumber == 2)
-                PlayerList.Add(new Head(_snake_Head_Pl2_Texture, new Vector2(0, 0), 0));
+            
             //else PlayerList.Add(new Head(_snake_Head_Pl1_Texture, new Vector2(0, 0), 0));
 
         }
 
         public void Update(GameTime gameTime)
         {
+
             if (Keyboard.GetState().IsKeyDown(Keys.D))
                 _client.SendMainGameMsg(Client.SendMessageType.INPUT_RIGHT);
             if (Keyboard.GetState().IsKeyDown(Keys.A))
                 _client.SendMainGameMsg(Client.SendMessageType.INPUT_LEFT);
 
             _client.CheckForMessagesGameManager(PlayerList);
+
+            
         }
         
 
@@ -112,18 +131,22 @@ namespace Game_2
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            PlayerList.Reverse();
-            foreach (PlayerComponent playerComponent in PlayerList)
+            if (_client.PlayerNumber != 0)
             {
-                playerComponent.Draw(gameTime, spriteBatch);
+                PlayerList.Reverse();
+                foreach (PlayerComponent playerComponent in PlayerList)
+                {
+                    playerComponent.Draw(gameTime, spriteBatch);
+                }
+                PlayerList.Reverse();
+
+
+                foreach (Food food in _foodList)
+                {
+                    food.Draw(gameTime, spriteBatch);
+                }
             }
-            PlayerList.Reverse();
             
-           
-            foreach (Food food in _foodList)
-            {
-                food.Draw(gameTime, spriteBatch);
-            }
         }
 
         
