@@ -137,7 +137,7 @@ namespace Game_2.Network
             return MsgType.NOT_SPECIFIC;
         }
 
-        public MsgType CheckForMessagesGameManager(List<PlayerComponent> pPlayerList, List<PlayerComponent> pEnemyList)
+        public MsgType CheckForMessagesGameManager(List<PlayerComponent> pPlayerList, List<PlayerComponent> pEnemyList, GameManager gameManager)
         {
             NetIncomingMessage msg;
             while ((msg = _client.ReadMessage()) != null)
@@ -160,8 +160,8 @@ namespace Game_2.Network
                                 int eY = msg.ReadVariableInt32();
                                 pEnemyList[0].CurrentPosition = new Vector2(eX, eY);
                                 pEnemyList[0].Rotation = msg.ReadFloat();
-
-
+                                gameManager.player1Score = msg.ReadVariableInt32();
+                                gameManager.player2Score = msg.ReadVariableInt32();
                                 return MsgType.NOT_SPECIFIC;
                         }
                         //handle custom messages

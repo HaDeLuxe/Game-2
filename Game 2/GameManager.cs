@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Game_2
 {
@@ -33,6 +34,10 @@ namespace Game_2
 
         private bool _headAdded = false;
 
+        private Timer _timer;
+
+        private SpriteFont _font;
+
         #endregion
 
 
@@ -42,10 +47,16 @@ namespace Game_2
 
         public List<PlayerComponent> EnemyPlayer { get; set; }
 
+        public int player1Score { get; set; }
+
+        public int player2Score { get; set; }
+
         #endregion
 
 
         #region methods
+
+
 
         public GameManager(Client pClient)
         {
@@ -54,9 +65,14 @@ namespace Game_2
             _foodList = new List<Food>();
             _client = pClient;
 
+            player1Score = 0;
+            player2Score = 0;
+
+            
             MainPlayer.Add(new Head(null, new Vector2(0, 0), 0));
         }
 
+       
         public void initGame()
         {
             if (_client.PlayerNumber == 1 && !_headAdded)
@@ -85,7 +101,10 @@ namespace Game_2
             _snake_Body_Pl2_Texture = Content.Load<Texture2D>("snakeRobot_link_red");
 
             _food_Texture = Content.Load<Texture2D>("Food");
-            
+
+            _font = Content.Load<SpriteFont>("Arial");
+
+
 
         }
 
@@ -97,11 +116,12 @@ namespace Game_2
             if (Keyboard.GetState().IsKeyDown(Keys.A))
                 _client.SendMainGameMsg(Client.SendMessageType.INPUT_LEFT);
 
-            _client.CheckForMessagesGameManager(MainPlayer, EnemyPlayer);
-
-            
+            _client.CheckForMessagesGameManager(MainPlayer, EnemyPlayer, this);
         }
+
+
         
+
 
         //public void _updatePlayer(List<PlayerComponent> pPlayerList, GameTime gameTime, short pPlayer)
         //{
@@ -144,17 +164,21 @@ namespace Game_2
                 {
                     enemyComponent.Draw(gameTime, spriteBatch);
                 }
-
-
                 //foreach (Food food in _foodList)
                 //{
                 //    food.Draw(gameTime, spriteBatch);
                 //}
             }
-            
+
+            string score1 = "Player 1: " + player1Score;
+            string score2 = "Player 2: " + player2Score;
+            spriteBatch.DrawString(_font, score1, new Vector2(100, 50), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(_font, score2, new Vector2(100, 75), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
+
         }
 
-        
+
         #endregion
 
     }
